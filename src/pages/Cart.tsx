@@ -1,11 +1,11 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
-import { Product } from "../types";
+import { CartItem } from "../types";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   useEffect(() => {
@@ -20,7 +20,9 @@ export default function Cart() {
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price, 0).toFixed(2);
+    return cartItems
+      .reduce((total, item) => total + item.price * item.quantity, 0)
+      .toFixed(2);
   };
 
   return (
@@ -46,15 +48,17 @@ export default function Cart() {
                 >
                   <img
                     src={item.image}
-                    alt={item.name}
+                    alt={item.title}
                     className="w-24 h-24 object-cover rounded-md"
                   />
                   <div className="flex-grow ml-6">
-                    <h3 className="text-lg font-semibold">{item.name}</h3>
+                    <h3 className="text-lg font-semibold">{item.title}</h3>
                     <p className="text-gray-600">{item.description}</p>
                   </div>
                   <div className="flex items-center gap-6">
-                    <p className="text-lg font-semibold">${item.price}</p>
+                    <p className="text-lg font-semibold">
+                      ${item.price} x {item.quantity}
+                    </p>
                     <button
                       onClick={() => removeFromCart(item.id)}
                       className="p-2 text-red-500 hover:text-red-700 transition-colors"
