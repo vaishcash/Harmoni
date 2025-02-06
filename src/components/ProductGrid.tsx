@@ -6,7 +6,7 @@ import ProductCard from "./ProductCard";
 
 interface ProductGridProps {
   category: string;
-  onProductSelect: (product: Product) => void;
+  onProductSelect: (product: CartItem) => void;
 }
 
 export default function ProductGrid({
@@ -25,6 +25,8 @@ export default function ProductGrid({
     fetch(url)
       .then((res) => res.json())
       .then((data: Product[]) => {
+
+        // local storage
         const currentCart = JSON.parse(
           localStorage.getItem("cart") || "[]"
         ) as CartItem[];
