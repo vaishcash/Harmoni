@@ -1,13 +1,11 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
-import { Product } from "../types";
+import { X, Minus, Plus } from "lucide-react";
+import { Product, CartItem } from "../types";
 
 interface ProductModalProps {
   product: Product;
   onClose: () => void;
-  onAddToCart: () => void;
+  onAddToCart: (cartItem: CartItem) => void;
 }
 
 export default function ProductModal({
@@ -16,6 +14,7 @@ export default function ProductModal({
   onAddToCart,
 }: ProductModalProps) {
   const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
   const [fullProduct, setFullProduct] = useState<Product | null>(null);
 
   useEffect(() => {
@@ -27,8 +26,17 @@ export default function ProductModal({
       });
   }, [product.id]);
 
+  const handleAddToCart = () => {
+    const cartItem: CartItem = {
+      ...product,
+      quantity,
+    };
+    onAddToCart(cartItem);
+    onClose();
+  };
+
   if (loading) {
-    return <>...Loading</>;
+    return <div>Loading...</div>;
   }
 
   return (
@@ -63,14 +71,31 @@ export default function ProductModal({
           </p>
         </div>
 
-        {/* Price & Button */}
-        <div className="flex items-center justify-between mt-4">
-          <p className="text-lg font-bold text-gray-900">
-            ${product.price.toFixed(2)}
-          </p>
+        {/* Price, Quantity & Button */}
+        <div className="mt-4">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-lg font-bold text-gray-900">
+              ${product.price.toFixed(2)}
+            </p>
+            <div className="flex items-center border rounded-lg">
+              <button
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                className="p-2 border-r hover:bg-gray-100"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+              <span className="px-4">{quantity}</span>
+              <button
+                onClick={() => setQuantity((q) => q + 1)}
+                className="p-2 border-l hover:bg-gray-100"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
           <button
-            onClick={onAddToCart}
-            className="bg-blue-600 text-white px-4 py-2 text-sm rounded-lg hover:bg-blue-700 transition-colors"
+            onClick={handleAddToCart}
+            className="w-full bg-blue-600 text-white px-4 py-2 text-sm rounded-lg hover:bg-blue-700 transition-colors"
           >
             Add to Cart
           </button>
@@ -79,93 +104,3 @@ export default function ProductModal({
     </div>
   );
 }
-// "use client";
-
-// import { useState } from "react";
-// import { X, Minus, Plus } from "lucide-react";
-
-// interface ProductCardProps {
-//   product: {
-//     image: string;
-//     title: string;
-//     price: number;
-//     description: string;
-//     stock: boolean;
-//     reviews: number;
-//   };
-//   onClose: () => void;
-// }
-
-// export default function ProductCard({ product, onClose }: ProductCardProps) {
-//   const [quantity, setQuantity] = useState(1);
-
-//   return (
-//     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-//       <div className="bg-white rounded-2xl shadow-lg max-w-lg w-full flex p-6">
-//         {/* Image Section */}
-//         <div className="w-1/2">
-//           <img
-//             src={product.image}
-//             alt={product.title}
-//             className="rounded-lg object-cover w-full h-full"
-//           />
-//         </div>
-
-//         {/* Content Section */}
-//         <div className="w-1/2 pl-4 flex flex-col justify-between">
-//           {/* Title & Close Button */}
-//           <div className="flex justify-between items-center">
-//             <h2 className="text-lg font-semibold">{product.title}</h2>
-//             <button
-//               onClick={onClose}
-//               className="p-2 hover:bg-gray-200 rounded-full transition"
-//             >
-//               <X className="w-5 h-5" />
-//             </button>
-//           </div>
-
-//           {/* Ratings & Stock Status */}
-//           <div className="text-sm text-gray-500 flex items-center gap-2">
-//             ⭐⭐⭐⭐⭐ <span>({product.reviews} Reviews)</span>
-//             <span className={product.stock ? "text-green-500" : "text-red-500"}>
-//               {product.stock ? "In Stock" : "Out of Stock"}
-//             </span>
-//           </div>
-
-//           {/* Price */}
-//           <p className="text-2xl font-bold text-gray-900">
-//             ${product.price.toFixed(2)}
-//           </p>
-
-//           {/* Short Description */}
-//           <p className="text-sm text-gray-600 line-clamp-2">
-//             {product.description}
-//           </p>
-
-//           {/* Quantity & Buy Now Button */}
-//           <div className="flex items-center gap-4 mt-4">
-//             <div className="flex items-center border rounded-lg">
-//               <button
-//                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-//                 className="p-2 border-r hover:bg-gray-100"
-//               >
-//                 <Minus className="w-4 h-4" />
-//               </button>
-//               <span className="px-4">{quantity}</span>
-//               <button
-//                 onClick={() => setQuantity((q) => q + 1)}
-//                 className="p-2 border-l hover:bg-gray-100"
-//               >
-//                 <Plus className="w-4 h-4" />
-//               </button>
-//             </div>
-
-//             <button className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition">
-//               Buy Now
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
