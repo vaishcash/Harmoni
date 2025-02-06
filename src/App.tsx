@@ -10,7 +10,8 @@ import BannerCarousel from "./components/BannerCarousel";
 
 export default function Home() {
   const [cartCount, setCartCount] = useState(0);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<CartItem | null>(null);
+  // console.log("🚀 ~ Home ~ selectedProduct:", selectedProduct);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const handleAddToCart = (product: Product) => {
@@ -38,7 +39,7 @@ export default function Home() {
 
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     setCartCount(updatedCart.length);
-    setSelectedProduct(null);
+    // setSelectedProduct(null);
   };
 
   const handleRemoveFromCart = (id: number) => {
