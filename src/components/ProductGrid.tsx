@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Product } from "../types";
+import { CartItem, Product } from "../types";
 import ProductCard from "./ProductCard";
-
 
 interface ProductGridProps {
   category: string;
@@ -14,7 +13,7 @@ export default function ProductGrid({
   category,
   onProductSelect,
 }: ProductGridProps) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,8 +24,20 @@ export default function ProductGrid({
 
     fetch(url)
       .then((res) => res.json())
-      .then((data) => {
-        setProducts(data);
+      .then((data: Product[]) => {
+        const currentCart = JSON.parse(
+          localStorage.getItem("cart") || "[]"
+        ) as CartItem[];
+
+        setProducts(
+          data.map((product) => {
+            const existingProduct = currentCart.find(
+              (item) => item.id === product.id
+            );
+            return existingProduct || { ...product, quantity: 0 };
+          })
+        );
+
         setLoading(false);
       });
   }, [category]);
