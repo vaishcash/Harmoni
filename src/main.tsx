@@ -8,17 +8,15 @@ import Women from "./pages/Women.tsx";
 import Kids from "./pages/Kids.tsx";
 import Cart from "./pages/Cart.tsx";
 
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-   
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/men" element={<Men />} />
         <Route path="/women" element={<Women />} />
         <Route path="/kids" element={<Kids />} />
-        <Route path="/cart" element={<Cart/>} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

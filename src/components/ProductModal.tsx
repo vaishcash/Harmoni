@@ -3,28 +3,25 @@ import { X, Minus, Plus } from "lucide-react";
 import { Product, CartItem } from "../types";
 
 interface ProductModalProps {
-  product: Product;
+  product: CartItem;
   onClose: () => void;
-  onAddToCart: (cartItem: CartItem) => void;
+  onAddToCart: (cartItem: Product) => void;
+  onRemoveToCart: (id: number) => void;
 }
 
 export default function ProductModal({
   product,
   onClose,
   onAddToCart,
+  onRemoveToCart,
 }: ProductModalProps) {
-  const [loading, setLoading] = useState(true);
-  const [quantity, setQuantity] = useState(1);
-  const [fullProduct, setFullProduct] = useState<Product | null>(null);
-
+  const cartData: CartItem[] = JSON.parse(localStorage.getItem("cart") || "[]");
+  const [quantity, setQuantity] = useState(
+    cartData.find((item) => item.id === product.id)?.quantity || 0
+  );
   useEffect(() => {
-    fetch(`https://fakestoreapi.com/products/${product.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setFullProduct(data);
-        setLoading(false);
-      });
-  }, [product.id]);
+    setQuantity(cartData.find((item) => item.id === product.id)?.quantity || 0);
+  }, [cartData]);
 
   const handleAddToCart = () => {
     const cartItem: CartItem = {
@@ -32,12 +29,8 @@ export default function ProductModal({
       quantity,
     };
     onAddToCart(cartItem);
-    onClose();
+    // onClose();
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -67,7 +60,7 @@ export default function ProductModal({
           </div>
 
           <p className="text-gray-600 text-sm mt-2 text-center line-clamp-2">
-            {fullProduct?.description || product.description}
+            {product.description}
           </p>
         </div>
 
@@ -79,14 +72,14 @@ export default function ProductModal({
             </p>
             <div className="flex items-center border rounded-lg">
               <button
-                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                onClick={() => onRemoveToCart(product.id)}
                 className="p-2 border-r hover:bg-gray-100"
               >
                 <Minus className="w-4 h-4" />
               </button>
               <span className="px-4">{quantity}</span>
               <button
-                onClick={() => setQuantity((q) => q + 1)}
+                onClick={handleAddToCart}
                 className="p-2 border-l hover:bg-gray-100"
               >
                 <Plus className="w-4 h-4" />
