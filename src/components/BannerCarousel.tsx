@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -29,7 +27,6 @@ const banners = [
       "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1600&h=400&fit=crop",
     buttonText: "View Deals",
   },
- 
 ];
 
 export default function BannerCarousel() {

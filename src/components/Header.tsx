@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, useRef } from "react";
 import { ShoppingCart, Search } from "lucide-react";
 import { cn } from "../../lib/utils";
@@ -18,7 +16,7 @@ export default function Header({
 }: HeaderProps) {
   const [categories, setCategories] = useState<string[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     fetch("https://fakestoreapi.com/products/categories")
       .then((res) => res.json())
@@ -28,7 +26,9 @@ const inputRef = useRef<HTMLInputElement>(null);
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900 max-md:text-sm ">FakeStore</h1>
+        <h1 className="text-2xl font-bold text-gray-900 max-md:text-sm ">
+          FakeStore
+        </h1>
 
         <div className=" flex items-center justify-center gap-4">
           <div>
@@ -109,5 +109,3 @@ const inputRef = useRef<HTMLInputElement>(null);
     </header>
   );
 }
-
-

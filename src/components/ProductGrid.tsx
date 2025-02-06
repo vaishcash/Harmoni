@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { CartItem, Product } from "../types";
 import ProductCard from "./ProductCard";
@@ -25,7 +23,6 @@ export default function ProductGrid({
     fetch(url)
       .then((res) => res.json())
       .then((data: Product[]) => {
-
         // local storage
         const currentCart = JSON.parse(
           localStorage.getItem("cart") || "[]"
